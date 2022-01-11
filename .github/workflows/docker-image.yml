@@ -8,8 +8,12 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-lates
+    runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag jfsanchez91/hexo-alpine:latest
+      - uses: actions/checkout@v1
+      - name: Login to DockerHub Registry
+        run: echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+      - name: Build the Docker image
+        run: docker build . --file Dockerfile --tag jfsanchez91/hexo-alpine:latest
+      - name: Push the Docker image
+        run: docker push jfsanchez91/hexo-alpine:latest
